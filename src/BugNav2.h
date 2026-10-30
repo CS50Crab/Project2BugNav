@@ -2,7 +2,7 @@
 #include "BugNav.h"
 #include <vector>
 
-class BugNav2 {
+class BugNav2 : public BugNav {
 
     private:
         std::vector<std::vector<bool>> maze;
