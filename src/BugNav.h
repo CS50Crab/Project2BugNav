@@ -7,6 +7,6 @@ class BugNav {
         std::vector<std::vector<bool>> maze;
     
     public:
-        std::vector<std::pair<int, int>> findPath(std::vector<std::vector<bool>>);
+        std::vector<std::pair<int, int>> findPath();
 
 };
