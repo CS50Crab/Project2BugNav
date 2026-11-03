@@ -13,7 +13,7 @@ class Bug {
         std::vector<int> startingPos; //{x, y}
         std::vector<int> targetPos; //{x, y}
         //bug states
-        bool isCircling;
+        bool isCircling; //whether or not the bug is currently circling an obstacle's perimeter
         bool reachedGoal;
 
         std::vector<std::vector<Tile>> map; //map
