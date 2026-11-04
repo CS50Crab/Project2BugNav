@@ -15,36 +15,36 @@ int main() {
         map.push_back(row);
     }
 
-    map[0][2].setPassable(false);
-    map[0][3].setPassable(false);
-    map[0][4].setPassable(false);
+    // map[0][2].setPassable(false);
+    // map[0][3].setPassable(false);
+    // map[0][4].setPassable(false);
 
-    map[1][2].setPassable(false);
-    map[1][3].setPassable(true);
-    map[1][4].setPassable(false);
+    // map[1][2].setPassable(false);
+    // map[1][3].setPassable(true);
+    // map[1][4].setPassable(false);
 
     map[2][2].setPassable(false);
-    map[2][3].setPassable(true);
+    map[2][3].setPassable(false);
     map[2][4].setPassable(false);
 
     map[3][2].setPassable(false);
     map[3][3].setPassable(false);
     map[3][4].setPassable(false);
 
-    map[4][2].setPassable(true);
+    map[4][2].setPassable(false);
     map[4][3].setPassable(false);
     map[4][4].setPassable(false);
 
-    std::vector<int> start = {1, 3};
-    std::vector<int> target = {6, 3};
+    std::pair<int, int> target = {0, 3};
+    std::pair<int, int> start = {6, 3};
     BugNav1 bugnav = BugNav1(map, start, target);
 
     for (int r = 0; r < height; r++) {
         for (int t = 0; t < width; t++) {
             
-            if (r == start[0] && t == start[1]) {
+            if (r == start.first && t == start.second) {
                 std::cout << "B" << " ";
-            } else if (r == target[0] && t == target[1]) {
+            } else if (r == target.first && t == target.second) {
                 std::cout << "G" << " ";
             } else {
                 std::cout << map[r][t].isPassable() << " ";

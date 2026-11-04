@@ -5,26 +5,32 @@ BugNav1::BugNav1() {
     map = {};
     bug = Bug();
 }
-BugNav1::BugNav1(std::vector<std::vector<Tile>> m_map, std::vector<int> m_start, std::vector<int> m_target) {
+BugNav1::BugNav1(std::vector<std::vector<Tile>> m_map, std::pair<int, int> m_start, std::pair<int, int> m_target) {
     map = m_map;
-    bug = Bug(m_map, m_start, m_start, m_target);
+    bug = Bug(m_map, m_start, m_target);
     target = m_target;
     start = m_start;
+
+    path = {};
 }
+
+
+
 //implementation of the bug 1 algorithm
-std::vector<std::pair<int, int>> BugNav1::findPath() {    
-    std::vector<std::pair<int, int>> path = {};
+std::vector<std::pair<int, int>> BugNav1::findPath() {
+    std::pair<int, int> currPosition = bug.getPosition();
+    path = {currPosition};
     std::cout << "starting Bug1 algorithm" << std::endl;
     
     while (bug.getPosition() != target) {
         std::cout << "get current position" << std::endl;
-        std::vector<int> currPosition = bug.getPosition();
+        currPosition = bug.getPosition();
         //exit if the map is unsolveable:
         //case 1: bug is surrounded on all immediate sides
         std::cout << "checking all sides" << std::endl;
         if ((bug.checkDown() != 0) && (bug.checkLeft() != 0) && (bug.checkRight() != 0) && (bug.checkUp() != 0)) {
             std::cout << "map unsolveable" << std::endl;
-            return {{currPosition.at(0), currPosition.at(1)}};
+            return path;
         } else {
             std::cout << "not immediately surrounded" << std::endl;
             //try to move towards target:
@@ -33,7 +39,7 @@ std::vector<std::pair<int, int>> BugNav1::findPath() {
             //check the result of the movement, if it was successful, update the path, and start the loop over
             if (movementResult == 0) {
                 std::cout << "movement successful" << std::endl;
-                path.push_back({bug.getPosition().at(0), bug.getPosition().at(1)});
+                path.push_back(bug.getPosition());
                 continue;
             } else {
                 std::cout << "movement unsuccessful" << std::endl;
@@ -58,7 +64,7 @@ std::vector<std::pair<int, int>> BugNav1::findPath() {
                     bug.circling(false);
                     int leaveObstacle = moveTowardsTarget();
                     if (leaveObstacle == 0) {
-                        path.push_back({bug.getPosition().at(0), bug.getPosition().at(1)});
+                        path.push_back(bug.getPosition());
                     } else if (leaveObstacle == 2) {
                         //obstacle is hit immedately after finishing circling, can figure out what the head on collision should have been to manually set it
                         if (bug.getPrevMove() == "up") {
@@ -89,8 +95,8 @@ std::vector<std::pair<int, int>> BugNav1::findPath() {
 //since, when moving towards the goal, the bug should technically never try to go into the edge of the map, I would expect a return of 0 or 2
 int BugNav1::moveTowardsTarget() {
     std::cout << "get current position (M): ";
-    std::vector<int> currPosition = bug.getPosition();
-    std::cout << "(" << currPosition.at(0) << ", " << currPosition.at(1) << std::endl;
+    std::pair<int, int> currPosition = bug.getPosition();
+    std::cout << "(" << currPosition.first << ", " << currPosition.second << std::endl;
     //calculate what direction the bug must go in
     //std::cout << "access index 0 and 1 of current position (M)" << std::endl;
 
@@ -99,8 +105,8 @@ int BugNav1::moveTowardsTarget() {
     // int currX = currPosition.at(0);
     // int currY = currPosition.at(1);
 
-    int yError = target.at(0) - currPosition.at(0);
-    int xError = target.at(1) - currPosition.at(1);
+    int yError = target.first - currPosition.first;
+    int xError = target.second - currPosition.second;
 
     //decide which direction the bug must go in based on the which error is bigger
     std::cout << "Trying: moving (M)" << std::endl;
@@ -122,14 +128,13 @@ int BugNav1::moveTowardsTarget() {
 }
 
 //the return condition parameter tells the algorithm whether or not we are returning to a closest point or making a full circle pass.
-std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::vector<int> stopPosition, bool returnCondition) {
-    //TODO- implement
-    std::vector<std::pair<int, int>> path = {};
+std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::pair<int, int> stopPosition, bool returnCondition) {
+    std::vector<std::pair<int, int>> circlePath = {};
     std::cout << "getting current position (C)" << std::endl;
     //std::vector<int> currPosition = bug.getPosition();
     bool start = false;
     while(bug.getCircleState()) {
-        std::vector<int> currPosition = bug.getPosition();
+        std::pair<int, int> currPosition = bug.getPosition();
         
         //check if circle is completed, but only if we've started circling already
         if (currPosition == stopPosition && start) {
@@ -147,6 +152,25 @@ std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::vector<int> stopP
 
             //only initialize circling if we hit the obstacle head on
             //if we are in the returning pass, the bug just completed a full circle, so the previous direction already works with the default algorithm
+            //handle if an obstacle is hit immediately when starting (path is empty)
+            if (start == false && path.size() == 1) {
+                if (bug.checkDown() != 0) {
+                    bug.moveRight();
+                } else if (bug.checkLeft() != 0) {
+                    bug.moveDown();
+                } else if (bug.checkRight() != 0) {
+                    bug.moveUp();
+                } else if (bug.checkUp() != 0) {
+                    bug.moveLeft();
+                } else {
+                    std::cout << "all paths clear" << std::endl;
+                    return circlePath;
+                }
+                start=true;
+                currPosition = bug.getPosition();
+                circlePath.push_back(currPosition);
+                continue;
+            }
             if (start == false && !returnCondition) {
                 //initialize circling immediately after obstacle hit
                 if (prevMove == "down") {
@@ -160,7 +184,7 @@ std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::vector<int> stopP
                 }
                 start = true;
                 currPosition = bug.getPosition();
-                path.push_back({currPosition[0], currPosition[1]});
+                circlePath.push_back(currPosition);
                 continue;
             }
             start = true;
@@ -209,13 +233,14 @@ std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::vector<int> stopP
                 //obstacle is lost somehow
                 std::cout << "obstacle lost while circling somehow (C)" << std::endl;
             }
+            std::cout << "(" << bug.getPosition().first << ", " << bug.getPosition().second << ")" << std::endl;
         }
         currPosition = bug.getPosition();
-        std::cout << "(C) currPos: (" << currPosition.at(0) << ", " << currPosition.at(1) << ")" << std::endl;
-        path.push_back({currPosition[0], currPosition[1]});
+        std::cout << "(C) currPos: (" << currPosition.first << ", " << currPosition.second << ")" << std::endl;
+        circlePath.push_back(currPosition);
     }
     std::cout << "circling successful (C)" << std::endl;
-    std::vector<int> temp_cp = bug.getClosestPoint();
-    std::cout << "(C) current closest position: (" << temp_cp.at(0) << ", " << temp_cp.at(1) << ")" << std::endl;
-    return path;
+    std::pair<int, int> temp_cp = bug.getClosestPoint();
+    std::cout << "(C) current closest position: (" << temp_cp.first << ", " << temp_cp.second << ")" << std::endl;
+    return circlePath;
 }
