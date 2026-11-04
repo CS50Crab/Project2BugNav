@@ -33,6 +33,8 @@ class Bug {
         std::vector<int> getDistFromTarget(); //return the x and y difference from the target position
         std::string getPrevMove(); //returns the previous move the bug made
         void circling(bool circling);
+        bool getCircleState();
+        std::vector<int> getClosestPoint();
 
         //movement
         /*

@@ -1,7 +1,8 @@
 #include "BugNav1.h"
+#include <iostream>
 
 BugNav1::BugNav1() {
-    map = {{}};
+    map = {};
     bug = Bug();
 }
 BugNav1::BugNav1(std::vector<std::vector<Tile>> m_map, std::vector<int> m_start, std::vector<int> m_target) {
@@ -10,13 +11,15 @@ BugNav1::BugNav1(std::vector<std::vector<Tile>> m_map, std::vector<int> m_start,
 }
 //implementation of the bug 1 algorithm
 std::vector<std::pair<int, int>> BugNav1::findGoal() {
-    std::vector<std::pair<int, int>> path;
+    std::vector<std::pair<int, int>> path = {};
+    std::cout << "starting Bug1 algorithm" << std::endl;
     
     while (bug.getPosition() != target) {
         std::vector<int> currPosition = bug.getPosition();
         //exit if the map is unsolveable:
         //case 1: bug is surrounded on all immediate sides
         if ((bug.checkDown() != 0) && (bug.checkLeft() != 0) && (bug.checkRight() != 0) && (bug.checkUp() != 0)) {
+            std::cout << "map unsolveable" << std::endl;
             return {{currPosition.at(0), currPosition.at(1)}};
         } else {
             //try to move towards target:
@@ -28,11 +31,19 @@ std::vector<std::pair<int, int>> BugNav1::findGoal() {
             } else {
                 //if movement result is not 0, that means something blocked the path.
                 if (movementResult == 2) {
-                    //start circling the perimeter
+                    //circle the perimeter
                     bug.circling(true);
-
+                    std::cout << "circling obstacle" << std::endl;
+                    std::vector<std::pair<int, int>> circlePath = circlePerimeter(bug.getPosition());
+                    path.insert(path.end(), circlePath.begin(), circlePath.end());
+                    //return to the closest point
+                    bug.circling(true);
+                    std::cout << "return to closest point" << std::endl;
+                    circlePath = circlePerimeter(bug.getClosestPoint());
+                    path.insert(path.end(), circlePath.begin(), circlePath.end());
                 } else {
                     //for some reason, the bug thinks its at the edge of the map
+                    std::cout << "blocked by edge of map" << std::endl;
                 }
             }
         }
@@ -67,4 +78,41 @@ int BugNav1::moveTowardsTarget() {
 
 std::vector<std::pair<int, int>> BugNav1::circlePerimeter(std::vector<int> stopPosition) {
     //TODO- implement
+    std::vector<std::pair<int, int>> path = {};
+    std::vector<int> currPosition = bug.getPosition();
+    while(bug.getCircleState()) {
+        // std::vector<int> currPosition = bug.getPosition();
+        if (currPosition == stopPosition) {
+            bug.circling(false);
+            break;
+        } else {
+            //should handle inside corners / obstacle edges
+            if ((bug.checkRight() != 0) && (bug.checkUp() == 0)) {
+                bug.moveUp();
+            } else if ((bug.checkDown() != 0) && (bug.checkRight() == 0)) {
+                bug.moveRight();
+            } else if ((bug.checkLeft() != 0) && (bug.checkDown() == 0)) {
+                bug.moveDown();
+            } else if ((bug.checkUp() != 0) && (bug.checkLeft() == 0)) {
+                bug.moveLeft();
+            } else {
+                //not edge/inside corner = outside corner
+                if ((bug.getPrevMove() == "up") && (bug.checkRight() == 0)) {
+                    bug.moveRight();
+                } else if ((bug.getPrevMove() == "right") && (bug.checkDown() == 0)) {
+                    bug.moveDown();
+                } else if ((bug.getPrevMove() == "down") && (bug.checkLeft() == 0)) {
+                    bug.moveLeft();
+                } else if ((bug.getPrevMove() == "left") && (bug.checkUp() == 0)) {
+                    bug.moveUp();
+                } else {
+                    //obstacle is lost somehow
+                    std::cout << "obstacle lost while circling somehow" << std::endl;
+                }
+            }
+        }
+        currPosition = bug.getPosition();
+        path.push_back({currPosition[0], currPosition[1]});
+    }
+    return path;
 }

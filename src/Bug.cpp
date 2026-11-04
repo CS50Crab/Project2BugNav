@@ -1,5 +1,6 @@
 #include "Bug.h"
 #include <cmath>
+#include <iostream>
 
 //constructors
 Bug::Bug() 
@@ -26,6 +27,13 @@ std::string Bug::getPrevMove() {
 }
 void Bug::circling(bool circling) {
     isCircling = circling;
+    std::cout << "toggle circling obstacle" << std::endl;
+}
+bool Bug::getCircleState() {
+    return isCircling;
+}
+std::vector<int> Bug::getClosestPoint() {
+    return currentClosestPoint;
 }
 
 //movement
@@ -38,6 +46,7 @@ int Bug::moveUp() {
         return 2;
     //otherwise move up and return 0;
     } else {
+        std::cout << "up" << std::endl;
         currentPos[1] = currentPos[1] - 1;
         prevMove = "up";
         //update closest point
@@ -58,6 +67,7 @@ int Bug::moveDown() {
         return 2;
     //otherwise move down and return 0;
     } else {
+        std::cout << "down" << std::endl;
         currentPos[1] = currentPos[1] + 1;
         prevMove = "down";
         //update closest point
@@ -78,6 +88,7 @@ int Bug::moveLeft() {
         return 2;
     //otherwise move left and return 0;
     } else {
+        std::cout << "left" << std::endl;
         currentPos[0] = currentPos[0] - 1;
         prevMove = "left";
         //update closest point
@@ -98,6 +109,7 @@ int Bug::moveRight() {
         return 2;
     //otherwise move right and return 0;
     } else {
+        std::cout << "right" << std::endl;
         currentPos[0] = currentPos[0] + 1;
         prevMove = "right";
         //update closest point
