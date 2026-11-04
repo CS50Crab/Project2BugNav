@@ -15,16 +15,27 @@ int main() {
         map.push_back(row);
     }
 
-    for (int i = 2; i < 2+3; i++) {
-        for (int j = 2; j < 2+3; j++) {
-            map[i][j].setPassable(false);
-        }
-    }
-    map[3][2].setPassable(true);
-    map[3][3].setPassable(true);
-    map[3][4].setPassable(true);
+    map[0][2].setPassable(false);
+    map[0][3].setPassable(false);
+    map[0][4].setPassable(false);
 
-    std::vector<int> start = {0, 3};
+    map[1][2].setPassable(false);
+    map[1][3].setPassable(true);
+    map[1][4].setPassable(false);
+
+    map[2][2].setPassable(false);
+    map[2][3].setPassable(true);
+    map[2][4].setPassable(false);
+
+    map[3][2].setPassable(false);
+    map[3][3].setPassable(false);
+    map[3][4].setPassable(false);
+
+    map[4][2].setPassable(true);
+    map[4][3].setPassable(false);
+    map[4][4].setPassable(false);
+
+    std::vector<int> start = {1, 3};
     std::vector<int> target = {6, 3};
     BugNav1 bugnav = BugNav1(map, start, target);
 

@@ -128,60 +128,60 @@ int Bug::moveRight() {
 int Bug::checkUp() {
     //return 1 if at edge of map
     if (currentPos.at(0) == 0) {
-        std::cout << "edge" << std::endl;
+        // std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
     } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
-        std::cout << "obstacle" << std::endl;
+        // std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
-        std::cout << "passable" << std::endl;
+        // std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkDown() {
     //return 1 if at edge of map
     if (currentPos.at(0) == map.size() - 1) {
-        std::cout << "edge" << std::endl;
+        // std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
     } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
-        std::cout << "obstacle" << std::endl;
+        // std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
-        std::cout << "passable" << std::endl;
+        // std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkLeft() {
     //return 1 if at edge of map
     if (currentPos.at(1) == 0) {
-        std::cout << "edge" << std::endl;
+        // std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
     } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
-        std::cout << "obstacle" << std::endl;
+        // std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
-        std::cout << "passable" << std::endl;
+        // std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkRight() {
     //return 1 if at edge of map
     if (currentPos.at(1) == map.at(0).size() - 1) {
-        std::cout << "edge" << std::endl;
+        // std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
     } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
-        std::cout << "obstacle" << std::endl;
+        // std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
-        std::cout << "passable" << std::endl;
+        // std::cout << "passable" << std::endl;
        return 0;
     }
 }
