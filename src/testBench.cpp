@@ -1,63 +1,39 @@
 #include "BugNav1.h"
 #include "Tile.h"
+#include "Map.h"
 #include <iostream>
 
 int main() {
-    std::vector<std::vector<Tile>> map;
-    int width = 7;
-    int height = 7;
-    for (int r = 0; r < height; r++) {
-        std::vector<Tile> row;
-        for (int c = 0; c < width; c++) {
-            Tile tile = Tile();
-            row.push_back(tile);
-        }
-        map.push_back(row);
-    }
+    int height = 50;
+    int width = 50;
+    Map map = Map(34, height, width);
 
-    // map[0][2].setPassable(false);
-    // map[0][3].setPassable(false);
-    // map[0][4].setPassable(false);
+    std::pair<int, int> target = {10, 10};
+    std::pair<int, int> start = {0, 0};
+    BugNav1 bugnav = BugNav1(map.getMap(), start, target);
 
-    // map[1][2].setPassable(false);
-    // map[1][3].setPassable(true);
-    // map[1][4].setPassable(false);
+    map.print();
 
-    map[2][2].setPassable(false);
-    map[2][3].setPassable(false);
-    map[2][4].setPassable(false);
 
-    map[3][2].setPassable(false);
-    map[3][3].setPassable(false);
-    map[3][4].setPassable(false);
-
-    map[4][2].setPassable(false);
-    map[4][3].setPassable(false);
-    map[4][4].setPassable(false);
-
-    std::pair<int, int> target = {0, 3};
-    std::pair<int, int> start = {6, 3};
-    BugNav1 bugnav = BugNav1(map, start, target);
-
-    for (int r = 0; r < height; r++) {
-        for (int t = 0; t < width; t++) {
+    // for (int r = 0; r < height; r++) {
+    //     for (int t = 0; t < width; t++) {
             
-            if (r == start.first && t == start.second) {
-                std::cout << "B" << " ";
-            } else if (r == target.first && t == target.second) {
-                std::cout << "G" << " ";
-            } else {
-                std::cout << map[r][t].isPassable() << " ";
-            }
-        }
-        std::cout << std::endl;
-    }
+    //         if (r == start.first && t == start.second) {
+    //             std::cout << "B" << " ";
+    //         } else if (r == target.first && t == target.second) {
+    //             std::cout << "G" << " ";
+    //         } else {
+    //             std::cout << map.getMap()[r][t].isPassable() << " ";
+    //         }
+    //     }
+    //     std::cout << std::endl;
+    // }
 
 
-    std::vector<std::pair<int, int>> result = bugnav.findPath();
-    for (auto pair : result) {
-        std::cout << pair.first << ", " << pair.second << std::endl;
-    }
+    // std::vector<std::pair<int, int>> result = bugnav.findPath();
+    // for (auto pair : result) {
+    //     std::cout << pair.first << ", " << pair.second << std::endl;
+    // }
 
     return 0;
 }
