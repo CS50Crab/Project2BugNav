@@ -39,15 +39,15 @@ std::vector<int> Bug::getClosestPoint() {
 //movement
 int Bug::moveUp() {
     //return 1 if at edge of map
-    if (currentPos.at(1) == 0) {
+    if (currentPos.at(0) == 0) {
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
+    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
         return 2;
     //otherwise move up and return 0;
     } else {
         std::cout << "up" << std::endl;
-        currentPos[1] = currentPos[1] - 1;
+        currentPos[0] = currentPos[0] - 1;
         prevMove = "up";
         //update closest point
         double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
@@ -60,15 +60,15 @@ int Bug::moveUp() {
 }
 int Bug::moveDown() {
     //return 1 if at edge of map
-    if (currentPos.at(1) == map.size() - 1) {
+    if (currentPos.at(0) == map.size() - 1) {
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
+    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
         return 2;
     //otherwise move down and return 0;
     } else {
         std::cout << "down" << std::endl;
-        currentPos[1] = currentPos[1] + 1;
+        currentPos[0] = currentPos[0] + 1;
         prevMove = "down";
         //update closest point
         double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
@@ -81,15 +81,15 @@ int Bug::moveDown() {
 }
 int Bug::moveLeft() {
     //return 1 if at edge of map
-    if (currentPos.at(0) == 0) {
+    if (currentPos.at(1) == 0) {
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
         return 2;
     //otherwise move left and return 0;
     } else {
         std::cout << "left" << std::endl;
-        currentPos[0] = currentPos[0] - 1;
+        currentPos[1] = currentPos[1] - 1;
         prevMove = "left";
         //update closest point
         double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
@@ -102,15 +102,15 @@ int Bug::moveLeft() {
 }
 int Bug::moveRight() {
     //return 1 if at edge of map
-    if (currentPos.at(0) == map.at(0).size() - 1) {
+    if (currentPos.at(1) == map.at(0).size() - 1) {
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
         return 2;
     //otherwise move right and return 0;
     } else {
         std::cout << "right" << std::endl;
-        currentPos[0] = currentPos[0] + 1;
+        currentPos[1] = currentPos[1] + 1;
         prevMove = "right";
         //update closest point
         double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
@@ -124,49 +124,61 @@ int Bug::moveRight() {
 
 int Bug::checkUp() {
     //return 1 if at edge of map
-    if (currentPos.at(1) == 0) {
+    if (currentPos.at(0) == 0) {
+        std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
+    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
+        std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
+        std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkDown() {
     //return 1 if at edge of map
-    if (currentPos.at(1) == map.size() - 1) {
+    if (currentPos.at(0) == map.size() - 1) {
+        std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
+    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
+        std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
+        std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkLeft() {
     //return 1 if at edge of map
-    if (currentPos.at(0) == 0) {
+    if (currentPos.at(1) == 0) {
+        std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
+        std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
+        std::cout << "passable" << std::endl;
         return 0;
     }
 }
 int Bug::checkRight() {
     //return 1 if at edge of map
-    if (currentPos.at(0) == map.at(0).size() - 1) {
+    if (currentPos.at(1) == map.at(0).size() - 1) {
+        std::cout << "edge" << std::endl;
         return 1;
     //return 2 if blocked by obstacle
-    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
+        std::cout << "obstacle" << std::endl;
         return 2;
     //otherwise return 0;
     } else {
-        return 0;
+        std::cout << "passable" << std::endl;
+       return 0;
     }
 }

@@ -16,5 +16,5 @@ class BugNav1 : public BugNav {
         BugNav1(std::vector<std::vector<Tile>> m_map, std::vector<int> m_start, std::vector<int> m_target);
         std::vector<std::pair<int, int>> findPath() override;
         int moveTowardsTarget();
-        std::vector<std::pair<int, int>> circlePerimeter(std::vector<int> stopPosition);
+        std::vector<std::pair<int, int>> circlePerimeter(std::vector<int> stopPosition, bool returnCondition);
 };
