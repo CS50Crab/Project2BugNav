@@ -54,6 +54,19 @@ std::vector<std::pair<int, int>> BugNav1::findPath() {
                     int leaveObstacle = moveTowardsTarget();
                     if (leaveObstacle == 0) {
                         path.push_back({bug.getPosition().at(0), bug.getPosition().at(1)});
+                    } else if (leaveObstacle == 2) {
+                        //obstacle is hit immedately after finishing circling, can figure out what the head on collision should have been to manually set it
+                        if (bug.getPrevMove() == "up") {
+                            bug.setPrevMove("left");
+                        } else if (bug.getPrevMove() == "right") {
+                            bug.setPrevMove("up");
+                        } else if (bug.getPrevMove() == "down") {
+                            bug.setPrevMove("right");
+                        } else if (bug.getPrevMove() == "left") {
+                            bug.setPrevMove("down");
+                        } else {
+                            std::cout << "incorrect previous direction somehow" << std::endl;
+                        }
                     }
                 } else {
                     //for some reason, the bug thinks its at the edge of the map

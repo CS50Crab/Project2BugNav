@@ -25,6 +25,9 @@ std::vector<int> Bug::getDistFromTarget() {
 std::string Bug::getPrevMove() {
     return prevMove;
 }
+void Bug::setPrevMove(std::string m_prevMove) {
+    prevMove = m_prevMove;
+}
 void Bug::circling(bool circling) {
     isCircling = circling;
     std::cout << "toggle circling obstacle" << std::endl;

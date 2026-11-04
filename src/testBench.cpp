@@ -20,6 +20,9 @@ int main() {
             map[i][j].setPassable(false);
         }
     }
+    map[3][2].setPassable(true);
+    map[3][3].setPassable(true);
+    map[3][4].setPassable(true);
 
     std::vector<int> start = {0, 3};
     std::vector<int> target = {6, 3};
@@ -38,6 +41,7 @@ int main() {
         }
         std::cout << std::endl;
     }
+
 
     std::vector<std::pair<int, int>> result = bugnav.findPath();
     for (auto pair : result) {
