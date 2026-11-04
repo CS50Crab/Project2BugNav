@@ -1,4 +1,5 @@
 #include "Bug.h"
+#include <cmath>
 
 //constructors
 Bug::Bug() 
@@ -23,6 +24,9 @@ std::vector<int> Bug::getDistFromTarget() {
 std::string Bug::getPrevMove() {
     return prevMove;
 }
+void Bug::circling(bool circling) {
+    isCircling = circling;
+}
 
 //movement
 int Bug::moveUp() {
@@ -36,6 +40,12 @@ int Bug::moveUp() {
     } else {
         currentPos[1] = currentPos[1] - 1;
         prevMove = "up";
+        //update closest point
+        double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
+        double prevDist = std::sqrt(std::pow(targetPos[0] - currentClosestPoint[0], 2) + std::pow(targetPos[1] - currentClosestPoint[1], 2));
+        if (newDist < prevDist) {
+            currentClosestPoint = {currentPos[0], currentPos[1]};
+        }
         return 0;
     }
 }
@@ -50,6 +60,12 @@ int Bug::moveDown() {
     } else {
         currentPos[1] = currentPos[1] + 1;
         prevMove = "down";
+        //update closest point
+        double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
+        double prevDist = std::sqrt(std::pow(targetPos[0] - currentClosestPoint[0], 2) + std::pow(targetPos[1] - currentClosestPoint[1], 2));
+        if (newDist < prevDist) {
+            currentClosestPoint = {currentPos[0], currentPos[1]};
+        }
         return 0;
     }
 }
@@ -64,6 +80,12 @@ int Bug::moveLeft() {
     } else {
         currentPos[0] = currentPos[0] - 1;
         prevMove = "left";
+        //update closest point
+        double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
+        double prevDist = std::sqrt(std::pow(targetPos[0] - currentClosestPoint[0], 2) + std::pow(targetPos[1] - currentClosestPoint[1], 2));
+        if (newDist < prevDist) {
+            currentClosestPoint = {currentPos[0], currentPos[1]};
+        }
         return 0;
     }
 }
@@ -78,6 +100,12 @@ int Bug::moveRight() {
     } else {
         currentPos[0] = currentPos[0] + 1;
         prevMove = "right";
+        //update closest point
+        double newDist = std::sqrt(std::pow(targetPos[0] - currentPos[0], 2) + std::pow(targetPos[1] - currentPos[1], 2));
+        double prevDist = std::sqrt(std::pow(targetPos[0] - currentClosestPoint[0], 2) + std::pow(targetPos[1] - currentClosestPoint[1], 2));
+        if (newDist < prevDist) {
+            currentClosestPoint = {currentPos[0], currentPos[1]};
+        }
         return 0;
     }
 }
