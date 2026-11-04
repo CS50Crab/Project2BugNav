@@ -22,4 +22,5 @@ class BugNav1 : public BugNav {
         std::vector<std::pair<int, int>> findPath() override;
         int moveTowardsTarget();
         std::vector<std::pair<int, int>> circlePerimeter(std::pair<int, int> stopPosition, bool returnCondition);
+        std::string getDesiredDirection();
 };

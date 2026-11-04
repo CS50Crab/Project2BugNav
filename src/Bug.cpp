@@ -30,7 +30,7 @@ void Bug::setPrevMove(std::string m_prevMove) {
 }
 void Bug::circling(bool circling) {
     isCircling = circling;
-    std::cout << "toggle circling obstacle" << std::endl;
+    //std::cout << "toggle circling obstacle" << std::endl;
 }
 bool Bug::getCircleState() {
     return isCircling;
@@ -49,7 +49,7 @@ int Bug::moveUp() {
         return 2;
     //otherwise move up and return 0;
     } else {
-        std::cout << "up" << std::endl;
+        // std::cout << "up" << std::endl;
         currentPos.first = currentPos.first - 1;
         prevMove = "up";
         //update closest point
@@ -70,7 +70,7 @@ int Bug::moveDown() {
         return 2;
     //otherwise move down and return 0;
     } else {
-        std::cout << "down" << std::endl;
+        // std::cout << "down" << std::endl;
         currentPos.first = currentPos.first + 1;
         prevMove = "down";
         //update closest point
@@ -91,7 +91,7 @@ int Bug::moveLeft() {
         return 2;
     //otherwise move left and return 0;
     } else {
-        std::cout << "left" << std::endl;
+        // std::cout << "left" << std::endl;
         currentPos.second = currentPos.second - 1;
         prevMove = "left";
         //update closest point
@@ -112,7 +112,7 @@ int Bug::moveRight() {
         return 2;
     //otherwise move right and return 0;
     } else {
-        std::cout << "right" << std::endl;
+        // std::cout << "right" << std::endl;
         currentPos.second = currentPos.second + 1;
         prevMove = "right";
         //update closest point

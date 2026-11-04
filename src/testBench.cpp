@@ -4,15 +4,16 @@
 #include <iostream>
 
 int main() {
-    int height = 50;
-    int width = 50;
+    int height = 100;
+    int width = 100;
     Map map = Map(34, height, width);
 
-    std::pair<int, int> target = {10, 10};
+    //starting point and target point should always be along the edge of the map because I ensured that the edge tiles will always be clear
+    std::pair<int, int> target = {99, 99};
     std::pair<int, int> start = {0, 0};
     BugNav1 bugnav = BugNav1(map.getMap(), start, target);
 
-    map.print();
+    map.print({});
 
 
     // for (int r = 0; r < height; r++) {
@@ -30,10 +31,12 @@ int main() {
     // }
 
 
-    // std::vector<std::pair<int, int>> result = bugnav.findPath();
-    // for (auto pair : result) {
-    //     std::cout << pair.first << ", " << pair.second << std::endl;
-    // }
+    std::vector<std::pair<int, int>> result = bugnav.findPath();
+    std::cout << std::endl;
+    map.print(result);
+    for (auto pair : result) {
+        std::cout << "(" << pair.first << ", " << pair.second << "), ";
+    }
 
     return 0;
 }

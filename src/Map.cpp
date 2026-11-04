@@ -54,7 +54,7 @@ void Map::generateMap() {
         }
     }
     //4. smoothing iterations
-    print();
+    print({});
     std::cout << std::endl;
     smoothMap(1);
 }
@@ -102,10 +102,16 @@ int Map::checkSurroundingTiles(int r, int c) {
     return sum;
 }
 
-void Map::print() {
+void Map::print(std::vector<std::pair<int, int>> m_path) {
+    for (auto pair : m_path) {
+        map[pair.first][pair.second].visit();
+    }
+
     for (auto row : map) {
         for (auto tile : row) {
-            if (tile.isPassable()) {
+            if (tile.isVisited()) {
+                std::cout << "=";
+            } else if (tile.isPassable()) {
                 std::cout << ".";
             } else {
                 std::cout << "#";

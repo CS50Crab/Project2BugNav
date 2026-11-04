@@ -10,4 +10,5 @@ class Tile {
         bool isPassable();
         void setPassable(bool m_passable);
         void visit();
+        bool isVisited();
 };

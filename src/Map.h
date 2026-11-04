@@ -15,7 +15,7 @@ class Map {
         Map(int density, int width, int height);
         void generateMap();
         void smoothMap(int iterations);
-        void print();
+        void print(std::vector<std::pair<int, int>> m_path);
         int checkSurroundingTiles(int r, int c);
         std::vector<std::vector<Tile>> getMap();
 
