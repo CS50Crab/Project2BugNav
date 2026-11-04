@@ -9,6 +9,6 @@ class BugNav2 : public BugNav {
     
     public:
         BugNav2(std::vector<std::vector<bool>>);
-        std::vector<std::pair<int, int>> findPath();
+        std::vector<std::pair<int, int>> findPath() override;
 
 };

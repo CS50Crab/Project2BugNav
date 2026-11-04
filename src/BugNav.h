@@ -7,8 +7,9 @@ class BugNav {
         std::vector<std::vector<bool>> maze;
     
     public:
-        BugNav();
-        BugNav(std::vector<std::vector<bool>>);
-        std::vector<std::pair<int, int>> findPath();
+        BugNav() = default;
+        BugNav(std::vector<std::vector<bool>> inputMaze) : maze(inputMaze) {}
+        virtual ~BugNav() = default;
+        virtual std::vector<std::pair<int, int>> findPath() = 0;
 
 };
