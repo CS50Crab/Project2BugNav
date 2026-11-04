@@ -1,0 +1,132 @@
+#include "Bug.h"
+
+//constructors
+Bug::Bug() 
+    : map({{}}), currentPos({0,0}), startingPos({0,0}), targetPos({0,0}), isCircling(false), reachedGoal(false), currentClosestPoint({0,0}) {}
+
+Bug::Bug(std::vector<std::vector<Tile>>& m_map, std::vector<int> m_current, std::vector<int> m_starting, std::vector<int> m_target)
+    : map(m_map), currentPos(m_current), startingPos(m_starting), targetPos(m_target), isCircling(false), reachedGoal(false), currentClosestPoint(m_current) {}
+
+//getters & setters
+std::vector<int> Bug::getPosition() {
+    return currentPos;
+}
+void Bug::setTarget(int x, int y) {
+    targetPos = {x, y};
+}
+std::vector<int> Bug::getDistFromTarget() {
+    //using goal - current
+    int xdiff = targetPos.at(0) - currentPos.at(0);
+    int ydiff = targetPos.at(1) - currentPos.at(1);
+    return {xdiff, ydiff};
+}
+std::string Bug::getPrevMove() {
+    return prevMove;
+}
+
+//movement
+int Bug::moveUp() {
+    //return 1 if at edge of map
+    if (currentPos.at(1) == 0) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
+        return 2;
+    //otherwise move up and return 0;
+    } else {
+        currentPos[1] = currentPos[1] - 1;
+        prevMove = "up";
+        return 0;
+    }
+}
+int Bug::moveDown() {
+    //return 1 if at edge of map
+    if (currentPos.at(1) == map.size() - 1) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
+        return 2;
+    //otherwise move down and return 0;
+    } else {
+        currentPos[1] = currentPos[1] + 1;
+        prevMove = "down";
+        return 0;
+    }
+}
+int Bug::moveLeft() {
+    //return 1 if at edge of map
+    if (currentPos.at(0) == 0) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
+        return 2;
+    //otherwise move left and return 0;
+    } else {
+        currentPos[0] = currentPos[0] - 1;
+        prevMove = "left";
+        return 0;
+    }
+}
+int Bug::moveRight() {
+    //return 1 if at edge of map
+    if (currentPos.at(0) == map.at(0).size() - 1) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
+        return 2;
+    //otherwise move right and return 0;
+    } else {
+        currentPos[0] = currentPos[0] + 1;
+        prevMove = "right";
+        return 0;
+    }
+}
+
+int Bug::checkUp() {
+    //return 1 if at edge of map
+    if (currentPos.at(1) == 0) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) - 1).isPassable() == false) {
+        return 2;
+    //otherwise return 0;
+    } else {
+        return 0;
+    }
+}
+int Bug::checkDown() {
+    //return 1 if at edge of map
+    if (currentPos.at(1) == map.size() - 1) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0)).at(currentPos.at(1) + 1).isPassable() == false) {
+        return 2;
+    //otherwise return 0;
+    } else {
+        return 0;
+    }
+}
+int Bug::checkLeft() {
+    //return 1 if at edge of map
+    if (currentPos.at(0) == 0) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0) - 1).at(currentPos.at(1)).isPassable() == false) {
+        return 2;
+    //otherwise return 0;
+    } else {
+        return 0;
+    }
+}
+int Bug::checkRight() {
+    //return 1 if at edge of map
+    if (currentPos.at(0) == map.at(0).size() - 1) {
+        return 1;
+    //return 2 if blocked by obstacle
+    } else if (map.at(currentPos.at(0) + 1).at(currentPos.at(1)).isPassable() == false) {
+        return 2;
+    //otherwise return 0;
+    } else {
+        return 0;
+    }
+}
