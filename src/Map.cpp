@@ -54,8 +54,8 @@ void Map::generateMap() {
         }
     }
     //4. smoothing iterations
-    print({});
-    std::cout << std::endl;
+    // print({});
+    // std::cout << std::endl;
     smoothMap(1);
 }
 
