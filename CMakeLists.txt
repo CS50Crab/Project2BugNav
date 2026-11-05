@@ -20,7 +20,8 @@ add_executable(bug_nav_graphics
     src/Map.cpp
     src/Tile.cpp
     src/Bug.cpp
-    src/BugNav1.cpp)
+    src/BugNav1.cpp
+    src/BugNav2.cpp)
 target_link_libraries(bug_nav_graphics PRIVATE SFML::Graphics)
 if(MINGW)
     target_link_options(bug_nav_graphics PRIVATE -static-libgcc -static-libstdc++)
