@@ -1,4 +1,5 @@
 #include "BugNav2.h"
+#include "Tile.h"
 #include <iostream>
 #include <cmath>
 
@@ -6,7 +7,7 @@ std::vector<std::vector<bool>> generateMLine(int, int, std::pair<int, int>, std:
 int getSquareDist(std::pair<int, int>, std::pair<int, int>);
 
 // Constructor
-BugNav2::BugNav2(std::vector<std::vector<bool>> maze, std::pair<int, int> start, std::pair<int, int> goal) {
+BugNav2::BugNav2(std::vector<std::vector<Tile>> maze, std::pair<int, int> start, std::pair<int, int> goal) {
     this->maze = maze;
     this->start = start;
     this->goal = goal;
@@ -43,7 +44,7 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
             // std::cout << "Looking at " << nextStep.first << ", " << nextStep.second << std::endl;
             if (inRange && mLine[nextStep.first][nextStep.second] && !madeGreedyMove) {
                 std::cout << "Using " << nextStep.first << ", " << nextStep.second << std::endl;
-                if (maze[nextStep.first][nextStep.second]) {
+                if (maze[nextStep.first][nextStep.second].isPassable()) {
                     curStep = nextStep;
                     path.push_back(nextStep);
                     madeGreedyMove = true;
@@ -70,7 +71,7 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
 
             if (!followingObject) {
 
-                while (!inRange || !maze[nextStep.first][nextStep.second]) {
+                while (!inRange || !maze[nextStep.first][nextStep.second].isPassable()) {
 
                     greedyDirectionIndex++;
                     greedyDirectionIndex = greedyDirectionIndex >= movableDirections.size() ?
@@ -113,7 +114,7 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
                               && tempStep.second >= 0 && tempStep.second < maze[0].size();
                     
                     std::cout << "trying: " << tempStep.first << ", " << tempStep.second << std::endl;
-                    if (inRange && maze[tempStep.first][tempStep.second]) {
+                    if (inRange && maze[tempStep.first][tempStep.second].isPassable()) {
                         std::cout << "using" << std::endl;
                         nextStep = tempStep;
                         greedyDirectionIndex = tempDirectionIndex;
@@ -125,7 +126,7 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
 
                 if (!moved) {
 
-                    while (!inRange || !maze[nextStep.first][nextStep.second]) {
+                    while (!inRange || !maze[nextStep.first][nextStep.second].isPassable()) {
 
                         greedyDirectionIndex++;
                         greedyDirectionIndex = greedyDirectionIndex >= movableDirections.size() ?

@@ -1,11 +1,12 @@
 #pragma once
 #include "BugNav.h"
+#include "Tile.h"
 #include <vector>
 
 class BugNav2 : public BugNav {
 
     private:
-        std::vector<std::vector<bool>> maze;
+        std::vector<std::vector<Tile>> maze;
         std::vector<std::vector<bool>> mLine;
         std::vector<std::pair<int, int>> path;
         std::pair<int, int> start;
@@ -18,7 +19,7 @@ class BugNav2 : public BugNav {
         };
     
     public:
-        BugNav2(std::vector<std::vector<bool>>, std::pair<int, int>, std::pair<int, int>);
+        BugNav2(std::vector<std::vector<Tile>>, std::pair<int, int>, std::pair<int, int>);
         std::vector<std::pair<int, int>> findPath() override;
 
 };
