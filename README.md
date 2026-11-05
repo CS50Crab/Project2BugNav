@@ -16,6 +16,8 @@ cmake -S . -B build -G Ninja
 cmake --build build -j 8
 ```
 
+SFML will automatically install. 
+
 ## Run
 
 For a map with 100,000 cells:
