@@ -12,7 +12,7 @@ class BugNav {
     
     public:
         BugNav() = default;
-        BugNav(std::vector<std::vector<bool>> inputMaze) : maze(inputMaze) {}
+        BugNav(std::vector<std::vector<Tile>> inputMaze) : maze(inputMaze) {}
         virtual ~BugNav() = default;
         virtual std::vector<std::pair<int, int>> findPath() = 0;
 
