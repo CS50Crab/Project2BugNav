@@ -11,3 +11,7 @@ void Tile::setPassable(bool m_passable) {
 void Tile::visit() {
     visited = true;
 }
+
+bool Tile::isVisited() {
+    return visited;
+}

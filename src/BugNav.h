@@ -11,7 +11,9 @@ class BugNav {
         std::pair<int, int> goal;
     
     public:
-        // BugNav(std::vector<std::vector<bool>>, std::pair<int, int>, std::pair<int, int>);
+        BugNav() = default;
+        BugNav(std::vector<std::vector<Tile>> inputMaze) : maze(inputMaze) {}
+        virtual ~BugNav() = default;
         virtual std::vector<std::pair<int, int>> findPath() = 0;
 
 };

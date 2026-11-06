@@ -1,0 +1,5 @@
+# ignore all .exe files across the project (recommended)
+*.exe
+
+# ignore local builds
+/build/
