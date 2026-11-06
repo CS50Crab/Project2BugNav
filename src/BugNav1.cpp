@@ -54,7 +54,7 @@ std::vector<std::pair<int, int>> BugNav1::findPath() {
                     path.insert(path.end(), circlePath.begin(), circlePath.end());
                     //if the closest point after circling the obstacle is still the previous starting point, then the map must be unsolveable because there is no way to get closer to the obstacle.
                     if (bug.getClosestPoint() == bug.getPosition()) {
-                        std::cout << "map unsolvable (blocked)" << std::endl;
+                        std::cout << "Bug1: map unsolvable (blocked)" << std::endl;
                         return path;
                     }
                     //return to the closest point

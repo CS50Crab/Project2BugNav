@@ -4,6 +4,7 @@
 #include <string>
 #include "Map.h"
 #include "BugNav1.h"
+#include "BugNav2.h"
 
 int main(int argc, char** argv) {
     int width = 50;
@@ -18,15 +19,16 @@ int main(int argc, char** argv) {
     }
 
     // use Map directly, including its smoothing pass
-    Map generatedMap(32, width, height); 
+    Map generatedMap(32, width, height);
     std::vector<std::vector<Tile>> tiles = generatedMap.getMap();
 
     // positions use {row, column}
     // (both endpoints are on the open border)
     std::pair<int, int> start = {height / 2, 0};
     std::pair<int, int> goal = {height / 2, width - 1};
-    std::vector<std::pair<int, int>> path = {start};
-    int step = 0;
+    std::vector<std::pair<int, int>> paths[2] = {{start}, {start}};
+    int steps[2] = {0, 0};
+    sf::Color bugColors[2] = {sf::Color::Blue, sf::Color::Red};
     bool playing = false;
     bool calculated = false;
     sf::Clock timer;
@@ -56,26 +58,39 @@ int main(int argc, char** argv) {
             if (event->is<sf::Event::Closed>()) window.close();
             if (auto key = event->getIf<sf::Event::KeyPressed>()) {
                 if (key->code == sf::Keyboard::Key::B && !calculated) {
-                    // this call runs the original algorithm before playback starts.
-                    window.setTitle("BugNav: Calculating routes (see terminal logs)");
-                    BugNav1 bug(tiles, start, goal);
-                    path = bug.findPath();
-                    if (path.empty()) path.push_back(start);
+                    window.setTitle("BugNav: Calculating both routes (see terminal logs)");
+                    BugNav1 bug1(tiles, start, goal);
+                    BugNav2 bug2(tiles, start, goal);
+                    paths[0] = bug1.findPath();
+                    paths[1] = bug2.findPath();
+                    for (int i = 0; i < 2; i++) {
+                        if (paths[i].empty() || paths[i].front() != start)
+                            paths[i].insert(paths[i].begin(), start);
+                        // stop at the first arrival, even if an algorithm keeps moving
+                        auto arrival = std::find(paths[i].begin(), paths[i].end(), goal);
+                        if (arrival != paths[i].end()) 
+                            paths[i].erase(arrival + 1, paths[i].end());
+                        steps[i] = 0;
+                        std::cout << "Bug" << i + 1 << ": " << paths[i].size() - 1
+                                  << " moves, " << (paths[i].back() == goal ? "goal reached" : "goal not reached")
+                                  << std::endl;
+                    }
+                    playing = false;
                     calculated = true;
-                    std::string result = path.back() == goal ? "Goal reached" : "Goal not reached";
-                    window.setTitle("BugNav: " + result + ". P play/pause, N next, R reset");
+                    window.setTitle("BugNav: Bug1 blue, Bug2 red. P play/pause, N next, R reset");
                     timer.restart();
                 }
-                if (key->code == sf::Keyboard::Key::P) {
+                if (key->code == sf::Keyboard::Key::P && calculated) {
                     playing = !playing;
                     timer.restart();
                 }
                 if (key->code == sf::Keyboard::Key::N) {
                     playing = false;
-                    if (step + 1 < static_cast<int>(path.size())) step++;
+                    for (int i = 0; i < 2; i++)
+                        if (steps[i] + 1 < static_cast<int>(paths[i].size())) steps[i]++;
                 }
                 if (key->code == sf::Keyboard::Key::R) {
-                    step = 0;
+                    steps[0] = steps[1] = 0;
                     playing = false;
                 }
             }
@@ -86,13 +101,14 @@ int main(int argc, char** argv) {
         float secondsPerMove = largeMap ? 0.005f : 0.05f; // <-- ratio here makes movement x10 faster for --large
 
         if (playing && timer.getElapsedTime().asSeconds() >= secondsPerMove) {
-            int moves = static_cast<int>(
-                timer.getElapsedTime().asSeconds() / secondsPerMove);
+            int moves = static_cast<int>(timer.getElapsedTime().asSeconds() / secondsPerMove);
 
-            step = std::min(step + moves, static_cast<int>(path.size()) - 1);
+            for (int i = 0; i < 2; i++)
+                steps[i] = std::min(steps[i] + moves, static_cast<int>(paths[i].size()) - 1);
             timer.restart();
 
-            if (step + 1 >= static_cast<int>(path.size())) {
+            if (steps[0] + 1 >= static_cast<int>(paths[0].size()) &&
+                steps[1] + 1 >= static_cast<int>(paths[1].size())) {
                 playing = false;
             }
         }
@@ -100,21 +116,23 @@ int main(int argc, char** argv) {
         window.clear(sf::Color::White);
         window.draw(mapPicture);
 
-        // draw the trail from the path returned by Bug1
-        sf::VertexArray trail(sf::PrimitiveType::LineStrip);
-        for (int i = 0; i <= step; i++) {
-            sf::Vertex point;
-            point.position = {(path[i].second + 0.5f) * cellSize,
-                              (path[i].first + 0.5f) * cellSize};
-            point.color = sf::Color::Blue;
-            trail.append(point);
+        // draw both trails using the same playback clock:
+        for (int bug = 0; bug < 2; bug++) {
+            sf::VertexArray trail(sf::PrimitiveType::LineStrip);
+            for (int i = 0; i <= steps[bug]; i++) {
+                sf::Vertex point;
+                point.position = {(paths[bug][i].second + 0.5f) * cellSize,
+                                  (paths[bug][i].first + 0.5f) * cellSize};
+                point.color = bugColors[bug];
+                trail.append(point);
+            }
+            window.draw(trail);
         }
-        window.draw(trail);
 
         // draw start, goal, and the current robot position:
-        std::pair<int, int> positions[] = {start, goal, path[step]};
-        sf::Color colors[] = {sf::Color::Green, sf::Color(240, 190, 30), sf::Color::Blue};
-        for (int i = 0; i < 3; i++) {
+        std::pair<int, int> positions[] = {start, goal, paths[0][steps[0]], paths[1][steps[1]]};
+        sf::Color colors[] = {sf::Color::Green, sf::Color(240, 190, 30), bugColors[0], bugColors[1]};
+        for (int i = 0; i < 4; i++) {
             float radius = std::max(2.f, cellSize * 0.3f);
             sf::CircleShape circle(radius);
             circle.setOrigin({radius, radius});
