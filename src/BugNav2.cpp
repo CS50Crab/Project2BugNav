@@ -104,9 +104,10 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
                 while (!inRange || !maze[nextStep.first][nextStep.second].isPassable()) {
                     if (attempts++ >= 8) return path; //no available neighbor.
 
-                    greedyDirectionIndex++;
-                    greedyDirectionIndex = greedyDirectionIndex >= movableDirections.size() ?
-                        0 : greedyDirectionIndex;
+                    // Try rotating left
+                    greedyDirectionIndex--;
+                    greedyDirectionIndex = greedyDirectionIndex < 0 ?
+                        movableDirections.size() - 1 : greedyDirectionIndex;
                     // std::cout << "Current index: " << greedyDirectionIndex << std::endl;
                     greedyDirection = movableDirections[greedyDirectionIndex];
 
@@ -132,10 +133,10 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
                 
                 for (int i = 0; i < TURN_DEGREE; i++) {
 
-                    // Rotate left
-                    tempDirectionIndex--;
-                    tempDirectionIndex = tempDirectionIndex < 0 ?
-                        movableDirections.size() - 1 : tempDirectionIndex;
+                    // Rotate right
+                    tempDirectionIndex++;
+                    tempDirectionIndex = tempDirectionIndex >= movableDirections.size() ?
+                        0 : tempDirectionIndex;
                     tempDirection = movableDirections[tempDirectionIndex];
 
                     tempStep = std::make_pair(curStep.first + tempDirection.first,
@@ -164,9 +165,10 @@ std::vector<std::pair<int, int>> BugNav2::findPath() {
                     while (!inRange || !maze[nextStep.first][nextStep.second].isPassable()) {
                         if (attempts++ >= 8) return path; // no available neighbor.
 
-                        greedyDirectionIndex++;
-                        greedyDirectionIndex = greedyDirectionIndex >= movableDirections.size() ?
-                            0 : greedyDirectionIndex;
+                        // Try rotating left
+                        greedyDirectionIndex--;
+                        greedyDirectionIndex = greedyDirectionIndex < 0 ?
+                            movableDirections.size() - 1 : greedyDirectionIndex;
                         greedyDirection = movableDirections[greedyDirectionIndex];
 
                         nextStep = std::make_pair(curStep.first + greedyDirection.first,
