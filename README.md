@@ -9,14 +9,14 @@
 
 ## Build
 
-Run these commands from the folder that has `CMakeLists.txt`:
+(In Windows powershell) Run these commands from the folder that has `CMakeLists.txt`:
 
 ```powershell
 cmake -S . -B build -G Ninja
 cmake --build build -j 8
 ```
 
-SFML will automatically install. 
+CMake downloads SFML 3.0.1 during configuration. 
 
 ## Run
 
